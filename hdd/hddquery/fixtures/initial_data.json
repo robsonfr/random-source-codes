@@ -1,0 +1,45 @@
+[
+    {
+        "model" : "hddquery.tipoArquivo",
+        "pk" : 1,
+        "fields" : {
+            "nome" : "Imagens",
+            "extensoes" : "jpeg;jpg;gif;png;tif;tiff;bmp"                
+        }
+    },
+    {
+        "model" : "hddquery.tipoArquivo",
+        "pk" : 2,
+        "fields" : {
+            "nome" : "Sons",
+            "extensoes" : "mp3;wav;ogg;flac"                
+        }
+    },
+
+    {
+        "model" : "hddquery.tipoArquivo",
+        "pk" : 3,
+        "fields" : {
+            "nome" : "Documentos",
+            "extensoes" : "doc;xls;odt;txt;tex;htm;html;docx;xlsx;pdf;ppt;pptx"                
+        }
+    },
+
+    {
+        "model" : "hddquery.tipoArquivo",
+        "pk" : 4,
+        "fields" : {
+            "nome" : "Videos",
+            "extensoes" : "mpg;mpeg;mp4;avi;vob;mov;qt;rmvb;mkv"                
+        }
+    }, 
+
+    {
+        "model" : "hddquery.tipoArquivo",
+        "pk" : 5,
+        "fields" : {
+            "nome" : "Compactados",
+            "extensoes" : "rar;msi;zip;gz;tgz;7z;arj"                
+        }
+    }
+]

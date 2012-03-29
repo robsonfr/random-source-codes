@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>HD's</h2>
+<ul>
+{% for hd in lista_hds %}
+<li>{{ hd.nome }}</li>
+{% endfor %}
+</ul>
+<a href="/hdd/novo">Incluir novo HD</a>
+{% endblock %}
