@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 import re
+from django.db.utils import DEFAULT_DB_ALIAS
 
 # Create your models here.
 
@@ -64,7 +65,13 @@ class TipoArquivo(models.Model):
     def todas_extensoes():
         return reduce(lambda p,q : p+q, map(lambda i : i.lista_extensoes, TipoArquivo.objects.all()))
     
-
+    @staticmethod
+    def por_extensao(extensao):
+        for tipo in TipoArquivo.objects.all():
+            if extensao.lower() in tipo.lista_extensoes: 
+                return tipo 
+        return None
+    
 class Arquivo(models.Model):
     """Arquivos de um HD
     Uma busca normalmente retorna uma lista
@@ -79,6 +86,13 @@ class Arquivo(models.Model):
     dh_registro = models.DateTimeField(auto_now = True)
     tipo = models.ForeignKey(TipoArquivo)
     particao = models.ForeignKey(Particao)
+    
+    def save(self, *args, **kwargs):
+        if self.tipo is None and "." in self.nome:
+            import re            
+            self.tipo = TipoArquivo.por_extensao(re.split(r"\.", self.nome)[-1])
+        super(Arquivo, self).save(*args, **kwargs)
+        
     
 class HDForm(ModelForm):
     class Meta:

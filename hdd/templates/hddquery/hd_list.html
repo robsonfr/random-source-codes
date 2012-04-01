@@ -3,7 +3,9 @@
 <h2>HD's</h2>
 <ul>
 {% for hd in lista_hds %}
-<li>{{ hd.nome }}</li>
+<li><a href="/hdd/{{hd.id}}/editar/" title='Editar este HD'>{{ hd.nome }}</a>&nbsp; - &nbsp;
+<a href="/hdd/{{hd.id}}/particoes/" title="Particoes">Parti&ccedil;&otilde;es</a>
+</li>
 {% endfor %}
 </ul>
 <a href="/hdd/novo">Incluir novo HD</a>

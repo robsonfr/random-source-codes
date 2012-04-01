@@ -1,14 +1,64 @@
-<html>
-   <head>
-   <title>{% block title %}Titulo{% endblock %}</title>
-   </head>
-   <body>
-   <h1>HD Directory Index</h1>
-   <div>
-   {% block content %}
-   Conteudo
-   {% endblock %}
-   </div>
-   <hr/>
-   </body>
-</html>   
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="description" content="Website short description." />
+<meta name="keywords" content="website main keywords" />
+	<title>{% block title %}Titulo{% endblock %}</title>
+<link href="/static/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="header"><h1>{% block mainTitle %}HDD{% endblock %}</h1></div>
+
+<div id="sub_header">A Django application</div>
+
+<div id="main_content_top"></div>
+
+<div id="main_content">
+
+<div class="content">
+{% block content %}
+{% endblock %}
+</div>
+
+<div class="menu">
+<div class="menu_title">Main menu</div>
+<ul>
+<li><a href="/hdd/lista.html" class="menu_link">HDDs</a></li>
+<li><a href="/hdd/novo" class="menu_link">Add a new HDD</a></li>
+</ul>
+<div class="menu_title">Sub menu</div>
+<ul>
+<li><a href="http://www.pikanai.com" class="menu_link">Pikanai</a></li>
+</ul>
+<div class="menu_title">Friends</div>
+<ul>
+<li><a href="http://www.oswd.org" class="menu_link">OSWD</a></li>
+<li><a href="http://www.opendesigns.org" class="menu_link">Open Designs</a></li>
+</ul>
+</div>
+
+<div id="clear"></div>
+
+</div>
+
+<div id="main_content_bottom">
+</div>
+
+<div id="footer">
+{% block footer %}
+   <a href="/hdd/lista.html">Home</a>
+{% endblock %}
+<br/>
+<strong>Copyright &copy; 2007</strong> | <a href="#">Your Site</a> | <b>Design by</b> <a href="http://www.pikanai.com">Pikanai.com</a></div>
+
+</div>
+
+</body>
+
+</html>
