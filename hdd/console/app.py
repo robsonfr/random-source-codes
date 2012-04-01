@@ -94,7 +94,7 @@ class Particao(object):
     def endereco(self, base="/"):
         return self._endereco_part + base
     
-    def obter_arquivos(self, base='/', filtro = []):
+    def obter_arquivos(self, base=u'/', filtro = []):
 #        retorno = []
         ender = self.endereco(base)
         try:
@@ -122,7 +122,7 @@ class Particao(object):
 def main():
     f = TipoArquivo.todas_extensoes()
     print("Informe a letra da unidade com os dois pontos (:)")
-    letra = raw_input()
+    letra = unicode(raw_input())
     print("Escolha o HD/Pendrive na relacao abaixo:")
     for item in [(hd[u'pk'], str(hd[u'fields'][u'nome'])) for hd in metodo_post("http://localhost:8000/hdd/lista.json")]:
         print("[%02d]     %s\n" % item)
@@ -144,13 +144,12 @@ def main():
     for item in Particao(letra.upper()).obter_arquivos(filtro=f):
         d = item.dicionario
         d['particao'] = part_id
-        d['caminho_completo'] = d['caminho_completo'][2:]
-        r = metodo_post("http://localhost:8000/hdd/arquivo/novo", **d)
-        qt = qt + 1
-        print("%06d    %s" % (qt, repr(r)))
-
+        d['caminho_completo'] = d['caminho_completo'][2:].encode("UTF-8")
+        d['nome'] = d['nome'].encode("UTF-8")
+        qt = qt + 1        
+        r = metodo_post("http://localhost:8000/hdd/arquivo/novo/", **d)
 #        resposta = 
-
+    print qt
                 
 if __name__ == "__main__":
     main()

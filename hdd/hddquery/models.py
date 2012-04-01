@@ -88,7 +88,7 @@ class Arquivo(models.Model):
     particao = models.ForeignKey(Particao)
     
     def save(self, *args, **kwargs):
-        if self.tipo is None and "." in self.nome:
+        if "." in self.nome:
             import re            
             self.tipo = TipoArquivo.por_extensao(re.split(r"\.", self.nome)[-1])
         super(Arquivo, self).save(*args, **kwargs)

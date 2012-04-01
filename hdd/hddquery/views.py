@@ -2,19 +2,30 @@
 
 from django.views.generic.edit import ProcessFormView
 from django.views.generic import ListView
-from django.http import HttpResponse, Http404, HttpResponseBadRequest
+from django.http import HttpResponse, Http404, HttpResponseBadRequest,\
+    HttpResponseServerError
 from django.core import serializers
 from hddquery.models import Arquivo, HD, Particao
 
 class IncluirArquivoView(ProcessFormView):
     
     def post(self, request, *args, **kwargs):
-        campos = (f.attname for f in Arquivo._meta.fields)
-        p = {x : y for x,y in request.POST.items() if x in campos}
-        a = Arquivo.objects.create(**p)
-        l = Arquivo.objects.filter(id=a.id)
-        print(request.REQUEST['particao_id'])
-        return Serializador().render_to_response({'object_list' : l}, ('json','application/json'))
+        from datetime import datetime
+        p = request.POST
+        a=Arquivo()
+        a.data_hora = datetime.strptime(p.get('data_hora',''),'%Y-%m-%d %H:%M:%S')
+        a.tamanho = int(p['tamanho'])
+        a.particao = Particao.objects.get(id=int(p['particao']))
+        a.nome = unicode(p['nome'])
+        a.caminho_completo = unicode(p['caminho_completo'])
+        a.hash = p['hash']
+        try:
+            a.save()
+            l = Arquivo.objects.filter(id=a.id)
+            return Serializador().render_to_response({'object_list' : l}, ('json','application/json'))
+        except:
+            return HttpResponseServerError(a.nome)
+        #
         
     def get(self, request, *args, **kwargs):
         return HttpResponseBadRequest()
@@ -33,6 +44,20 @@ class ParticoesView(ListView):
         contexto = ListView.get_context_data(self, **kwargs)
         contexto['hd'] = HD.objects.get(id=self.kwargs['hd_id'])
         return contexto
+
+class ArquivosView(ListView):
+    template_name = "arquivo_list.html"
+    context_object_name = "lista_arquivos"
+    model = Arquivo
+    
+    def get_queryset(self):
+        return Arquivo.objects.filter(particao__id = self.kwargs['particao_id'])
+    
+    def get_context_data(self, **kwargs):
+        contexto = ListView.get_context_data(self, **kwargs)
+        contexto['particao'] = Particao.objects.get(id=self.kwargs['particao_id'])
+        return contexto
+
         
 class Serializador(object):    
     
@@ -56,4 +81,7 @@ class ListaHibrida(Serializador, ListView):
             raise Http404
         
 class ParticoesListaHibrida(ParticoesView, ListaHibrida):
+    pass
+
+class ArquivosListaHibrida(ArquivosView, ListaHibrida):
     pass
