@@ -3,7 +3,8 @@
 <h2>Parti&ccedil;&otilde;es de <a href="/hdd/{{hd.id}}/editar">{{hd.nome}}</a></h2>
 <ul>
 {% for particao in lista_particoes %}
-<li><a href="/hdd/{{ hd.id }}/particao/{{ particao.id }}/editar/" title='Editar esta particao'>{{ particao.nome }}</a></li>
+<li><a href="/hdd/{{ hd.id }}/particao/{{ particao.id }}/editar/" title='Editar esta particao'>{{ particao.nome }}</a> - 
+<a href="/hdd/{{ hd.id }}/particao/{{ particao.id }}/arquivos.html" title='Arquivos'>Arquivos</a></li>
 {% endfor %}
 </ul>
 <a href="/hdd/{{ hd.id }}/particao/nova/">Incluir nova Parti&ccedil;&atilde;o</a>

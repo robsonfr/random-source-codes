@@ -1,22 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Arquivos da Parti&ccedil;&atilde;o <a href="/hdd/{{hd.id}}/editar">{{hd.nome}}</a></h2>
+<h2>Arquivos da Parti&ccedil;&atilde;o <a href="/hdd/{{particao.hd.id}}/particao/{{particao.id}}/editar">{{ particao.nome}}</a></h2>
 <table border="1">
 <thead>
 <tr>
-<th>Nome</th>
-<th>Tipo</th>
-<th>Tamanho</th>
-<th>Data/hora</th>
+<th>Nome completo</th>
 </tr>
 </thead>
 <tbody>
 {% for arq in lista_arquivos %}
 <tr>
-<td>{{ arq.caminho_completo }}{{ arq.nome }}</td>
-<td>{{ arq.tipo.nome }}</td>
-<td>{{ arq.tamanho }}</td>
-<td>{{ arq.data_hora }}</td>
+<td>{{arq.caminho_completo}}{{ arq.nome }}</td>
 </tr>
 {% endfor %}
 </tbody>

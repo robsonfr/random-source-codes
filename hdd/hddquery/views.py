@@ -5,7 +5,14 @@ from django.views.generic import ListView
 from django.http import HttpResponse, Http404, HttpResponseBadRequest,\
     HttpResponseServerError
 from django.core import serializers
-from hddquery.models import Arquivo, HD, Particao
+from hddquery.models import Arquivo, HD, Particao, TipoArquivo
+
+class TipoArquivoTodosView(ProcessFormView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(", ".join(TipoArquivo.todas_extensoes()), mimetype="text/plain")
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request)
 
 class IncluirArquivoView(ProcessFormView):
     
@@ -23,7 +30,8 @@ class IncluirArquivoView(ProcessFormView):
             a.save()
             l = Arquivo.objects.filter(id=a.id)
             return Serializador().render_to_response({'object_list' : l}, ('json','application/json'))
-        except:
+        except Exception as e:
+            print e
             return HttpResponseServerError(a.nome)
         #
         

@@ -2,7 +2,6 @@ import os.path
 import re
 import md5
 import datetime
-from hddquery.models import TipoArquivo
 from win32file import GetFileAttributes as gfa
 
 # { x : p.__getattribute__(x) for x in dir(p) if type(app.Arquivo.__dict__.get(x,"")) == property}
@@ -10,19 +9,23 @@ from win32file import GetFileAttributes as gfa
 class HD(object):
     pass
 
-def metodo_post(url, **params):
+def metodo_post(url, tipo="json", **params):
     from urllib import urlencode
     from urllib2 import urlopen
     from json import load
     if len(params) > 0:   
-        x = urlopen(url, urlencode(params))
+        x = urlopen(url, urlencode(params))        
     else:
         x=urlopen(url)
-    return load(x)
+    if tipo == "json":
+        return load(x)
+    elif tipo == "txt":
+        return x.read()
+    
     
 
 def get_extensao(nome):
-    if "." in nome: return re.split(r"\.", nome)[-1]
+    if "." in nome: return re.split(r"\.", nome)[-1].lower()
     else: return ""
     
 class FSArquivo(object):
@@ -120,15 +123,21 @@ class Particao(object):
                 
 
 def main():
-    f = TipoArquivo.todas_extensoes()
+#    print ("Infome a URL do servidor")
+#    url = raw_input()
+    url = "http://192.168.1.101"    
+    f = metodo_post(url + "/hdd/arquivos/tipos/todos.txt",tipo="txt").split(", ")
+    print f
     print("Informe a letra da unidade com os dois pontos (:)")
     letra = unicode(raw_input())
+    
     print("Escolha o HD/Pendrive na relacao abaixo:")
-    for item in [(hd[u'pk'], str(hd[u'fields'][u'nome'])) for hd in metodo_post("http://localhost:8000/hdd/lista.json")]:
+    for item in [(hd[u'pk'], str(hd[u'fields'][u'nome'])) for hd in metodo_post(url + "/hdd/lista.json")]:
         print("[%02d]     %s\n" % item)
     hd_id = int(raw_input())
+    
     lista_particoes=[]
-    for part in metodo_post("http://localhost:8000/hdd/" + str(hd_id) + "/particoes.json"):
+    for part in metodo_post(url +"/hdd/" + str(hd_id) + "/particoes.json"):
         lista_particoes.append((part[u'pk'], part[u'fields'][u'nome'].encode("UTF-8").decode("ISO-8859-1"))) 
     if len(lista_particoes) == 0:
         print("Erro! O HD nao tem particoes!")
@@ -140,16 +149,21 @@ def main():
         part_id = int(raw_input())        
     else:
         part_id = lista_particoes[0][0]
+        
     qt = 0
     for item in Particao(letra.upper()).obter_arquivos(filtro=f):
         d = item.dicionario
         d['particao'] = part_id
         d['caminho_completo'] = d['caminho_completo'][2:].encode("UTF-8")
         d['nome'] = d['nome'].encode("UTF-8")
-        qt = qt + 1        
-        r = metodo_post("http://localhost:8000/hdd/arquivo/novo/", **d)
+        d['data_hora'] = str(d['data_hora']).split(".")[0]
+        qt = qt + 1
+        print qt,
+        print d['caminho_completo'] + d['nome']
+        #if qt >= 74583:        
+        r = metodo_post(url + "/hdd/arquivo/novo/", tipo="json", **d)
 #        resposta = 
-    print qt
+    
                 
 if __name__ == "__main__":
     main()

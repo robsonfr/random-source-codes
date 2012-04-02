@@ -3,9 +3,8 @@ from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
 from hddquery.models import HD, Particao
 from hddquery.views import IncluirArquivoView, ListaHibrida, ParticoesView,\
-    ParticoesListaHibrida, ArquivosListaHibrida
+    ParticoesListaHibrida, ArquivosListaHibrida, TipoArquivoTodosView
 from django.views.generic.list import ListView
-from hddquery.models import HD
 from django.views.decorators.csrf import csrf_exempt
 
 # Uncomment the next two lines to enable the admin:
@@ -24,4 +23,5 @@ urlpatterns = patterns('hddquery.views',
     url(r'^(?P<hd_id>\d+)/particao/(?P<pk>\d+)/editar/$', UpdateView.as_view(model = Particao, template_name="particao_new.html", success_url = "/hdd/")),
     url(r'^(?P<hd_id>\d+)/particao/(?P<pk>\d+)/arquivos\.(?P<ext>.+)$', UpdateView.as_view(model = Particao, template_name="particao_new.html", success_url = "/hdd/")),
     url(r'^(?P<hd_id>\d+)/particao/nova/$', CreateView.as_view(model = Particao, template_name="particao_new.html", success_url="/hdd/")),
+    url(r'^arquivos/tipos/todos.txt$', TipoArquivoTodosView.as_view()),
 )

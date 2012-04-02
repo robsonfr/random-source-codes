@@ -1,7 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
 import re
-from django.db.utils import DEFAULT_DB_ALIAS
 
 # Create your models here.
 
@@ -88,8 +87,7 @@ class Arquivo(models.Model):
     particao = models.ForeignKey(Particao)
     
     def save(self, *args, **kwargs):
-        if "." in self.nome:
-            import re            
+        if "." in self.nome:          
             self.tipo = TipoArquivo.por_extensao(re.split(r"\.", self.nome)[-1])
         super(Arquivo, self).save(*args, **kwargs)
         
