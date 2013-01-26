@@ -1,31 +1,11 @@
-class DistComp(object):
-    def __init__(self, cod, dist, comp = 1):
-        self.cod = cod
-        self.dist = dist
-        self.comp = comp
+      
         
-    @property
-    def list(self):
-        return [self.cod, self.dist, self.comp]
-
-    def __str__(self):
-        return "%s [%d, %d]" % tuple(self.list)
-        
-    def compara(self, outro):
-        if self.comp != outro.comp:
-            return outro.comp - self.comp
-        else:
-            return outro.dist - self.dist
-        
-        
-def busca(entrada, i, cod = 'C'):
-    opcoes = []
+def busca(entrada, i):    
     tam = len(entrada)
-    #j = max(max(i - 127, i-1),0)
     j = max(i - 127, 0)
     d = i
-    off = 0
-    
+    ofmax = 0
+    max_tamanho = -1
     while j < i and j < tam:
         k = j
         d = i
@@ -37,15 +17,16 @@ def busca(entrada, i, cod = 'C'):
                 k = k + 1
                 if d == tam or l == 127 or k == tam:
                     break
-            off = j - i
-            #return (d-1,DistComp(cod, off, l))
-            opcoes.append((d-1,DistComp(cod, off, l)))
+
+            if l > max_tamanho:
+                max_tamanho = l
+                ofmax = j - i                
+                            
         if k == i or k == tam:
             break
-        j = j + 1        
-    if len(opcoes) > 0:
-        opcoes.sort(lambda a,b : a[1].compara(b[1]))
-        return opcoes[0]
+        j = j + 1
+    if max_tamanho > 0:
+        return [ofmax, max_tamanho]
     else:
         return None   
     #return None
@@ -83,18 +64,19 @@ if __name__ == "__main__":
     i = 0
     while i < tam_arquivo:
         if i > 0:
-            p = busca(dados, i, cod)
+            p = busca(dados, i)
         else:
             p = None
         if p:
-            if p[1].comp >= 3:
-                saida = saida + p[1].list
-                i = p[0]
+            lx = p[1]
+            if lx >= 3:
+                saida = saida + [cod] + p
+                i = i + lx
             else:
-                for _ in range(p[1].comp):
+                for _ in range(lx):
                     saida.append(dados[i])
                     i = i + 1
-                i = i - 1
+            i = i - 1
         else:
             baite = int(dados[i])
             saida.append(baite)
