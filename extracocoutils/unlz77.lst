@@ -1,0 +1,58 @@
+AS09 Assembler for M6809 [1.42].                                     Page    1
+- c:\users\robson\documents\github\random-source-codes\extracocoutils\unlz7 --
+
+49 lines read, no errors in pass 1.
+3000 =                      org $3000
+                        
+3000 : 3476                 pshs a,b,x,y,u
+3002 : 8e0400               ldx #$400
+3005 : 108e3042             leay [dados]
+                            
+3009 : 8d03                 bsr uncompress
+300b : 3576                 puls y,u,x,b,a
+300d : 39                   rts
+                            
+300e :                  uncompress:    
+                            ; y aponta para os dados compactados
+                            ; a, b, u e x sao destruidos
+300e : eca1                 ldd, y++
+3010 : 338b                 leau d,x
+3012 : 3440                 pshs u
+3014 : a6a0                 lda, y+
+3016 : 3402                 pshs a
+3018 :                  prox:    
+3018 : a6a0                 lda, y+
+301a : a1e4                 cmpa, s
+301c : 2708                 beq dc
+301e :                  sto:    
+301e : a780                 sta ,x+
+3020 : ac61                 cmpx 1,s
+3022 : 25f4                 blo prox
+3024 : 2017                 bra fim    
+                            
+3026 :                  dc:
+3026 : a6a0                 lda ,y+
+3028 : 2604                 bne dx
+302a : a6e4                 lda, s
+302c : 20f0                 bra sto
+302e :                  dx:    
+302e : e6a0                 ldb, y+
+3030 : 3386                 leau a,x
+3032 :                  lp1:
+3032 : a6c0                 lda, u+
+3034 : a780                 sta, x+
+3036 : 5a                   decb
+3037 : 26f9                 bne lp1
+3039 : ac61                 cmpx 1,s
+303b : 25db                 blo prox    
+303d :                  fim:
+303d : 3540                 puls u
+303f : 3502                 puls a
+3041 : 39                   rts
+                            
+3042 :                  dados:    
+                        
+No errors in pass 2.
+Wrote binary from address $3000 through $3041.
+Total size 66 bytes.
+
