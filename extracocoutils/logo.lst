@@ -1,0 +1,24 @@
+AS09 Assembler for M6809 [1.42].                                     Page    1
+----------------------------------- logo.s -----------------------------------
+
+15 lines read, no errors in pass 1.
+3000 =                      org $3000
+3000 : 108e3017             leay [dados]
+3004 : 8e0400               ldx #$400
+3007 :                  lp1:
+3007 : eca1                 ldd, y++
+3009 : ed81                 std, x++
+300b : 8c0600               cmpx #$600
+300e : 26f7                 bne lp1
+3010 :                  lp2:
+3010 : ad9fa000             jsr [$a000]
+3014 : 27fa                 beq lp2
+3016 : 39                   rts
+                        
+                        
+3017 :                  dados:
+                                include "aaa.i"
+No errors in pass 2.
+Wrote binary from address $3000 through $3016.
+Total size 23 bytes.
+

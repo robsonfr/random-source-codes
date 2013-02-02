@@ -1,0 +1,25 @@
+AS09 Assembler for M6809 [1.42].                                     Page    1
+--------------------------------- fullram.s ----------------------------------
+
+16 lines read, no errors in pass 1.
+3000 =                      org $3000
+                            
+3000 : 3412                 pshs a,x
+3002 : 8e1c00               ldx #$1c00
+3005 : 1a50                 orcc #$50
+3007 :                  lp1:    
+3007 : b7ffde               sta $ffde
+300a : a684                 lda, x
+300c : b7ffdf               sta $ffdf
+300f : a780                 sta, x+
+3011 : 8cff00               cmpx #$FF00
+3014 : 26f1                 bne lp1
+3016 : 3512                 puls x,a
+3018 : b7ffdf               sta $ffdf
+301b : 1caf                 andcc #$AF
+301d : 39                   rts
+                            
+No errors in pass 2.
+Wrote binary from address $3000 through $301d.
+Total size 30 bytes.
+
